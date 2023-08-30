@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	http_listener "github.com/gerbsec/D2/listeners"
+	"github.com/gerbsec/D2/listeners"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +12,7 @@ func setupRouter() *gin.Engine {
 
 	r.GET("/Listeners/:name", func(c *gin.Context) {
 		name := c.Param("name")
-		info, err := http_listener.GetListenerInfoByName(name)
+		info, err := listeners.GetListenerInfoByName(name)
 		if err != nil {
 			c.String(http.StatusNotFound, err.Error())
 			return
@@ -21,16 +21,16 @@ func setupRouter() *gin.Engine {
 	})
 
 	r.GET("/Listeners", func(c *gin.Context) {
-		c.String(http.StatusOK, http_listener.GetAllListenersInfo())
+		c.String(http.StatusOK, listeners.GetAllListenersInfo())
 	})
 
 	r.POST("/Listener", func(c *gin.Context) {
-		var l http_listener.HttpListener
+		var l listeners.HttpListener
 		if err := c.BindJSON(&l); err != nil {
 			c.String(http.StatusBadRequest, "Request body is not a valid listener")
 			return
 		}
-		err := http_listener.CreateListener(l.Name, l.BindPort)
+		err := listeners.CreateListener(l.Name, l.BindPort)
 		if err != nil {
 			c.String(http.StatusBadRequest, err.Error())
 			return
@@ -40,7 +40,7 @@ func setupRouter() *gin.Engine {
 
 	r.DELETE("/StopListener/:name", func(c *gin.Context) {
 		name := c.Param("name")
-		http_listener.StopListenerByName(name)
+		listeners.StopListenerByName(name)
 		c.String(http.StatusOK, "Listener stopped")
 	})
 
