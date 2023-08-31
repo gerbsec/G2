@@ -38,7 +38,7 @@ func (a *Agent) GetPendingTasks() []*AgentTask {
 	defer a.mutex.Unlock()
 
 	tasks := a.pendingTasks
-	a.pendingTasks = []*AgentTask{} // reset the pending tasks after fetching
+	a.pendingTasks = []*AgentTask{}
 	return tasks
 }
 

@@ -8,8 +8,8 @@ import (
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 
-	// Setup routes for listeners
 	routes.SetupListenerRoutes(r)
+	routes.SetupAgentRoutes(r)
 
 	return r
 }
