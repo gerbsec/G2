@@ -8,8 +8,6 @@ import (
 	"github.com/google/uuid"
 )
 
-var agentService = agents.NewService()
-
 func SetupAgentRoutes(r *gin.Engine) {
 	r.GET("/Agents", getAgents)
 	r.GET("/Agents/:agentId", getAgent)
@@ -19,13 +17,13 @@ func SetupAgentRoutes(r *gin.Engine) {
 }
 
 func getAgents(c *gin.Context) {
-	allAgents := agentService.GetAgents()
+	allAgents := agents.GetServiceInstance().GetAgents()
 	c.JSON(http.StatusOK, allAgents)
 }
 
 func getAgent(c *gin.Context) {
 	agentId := c.Param("agentId")
-	agent := agentService.GetAgent(agentId)
+	agent := agents.GetServiceInstance().GetAgent(agentId)
 	if agent == nil {
 		c.String(http.StatusNotFound, "Agent not found")
 		return
@@ -35,7 +33,7 @@ func getAgent(c *gin.Context) {
 
 func getTaskResults(c *gin.Context) {
 	agentId := c.Param("agentId")
-	agent := agentService.GetAgent(agentId)
+	agent := agents.GetServiceInstance().GetAgent(agentId)
 	if agent == nil {
 		c.String(http.StatusNotFound, "Agent not found")
 		return
@@ -47,7 +45,7 @@ func getTaskResults(c *gin.Context) {
 func getTaskResult(c *gin.Context) {
 	agentId := c.Param("agentId")
 	taskId := c.Param("taskId")
-	agent := agentService.GetAgent(agentId)
+	agent := agents.GetServiceInstance().GetAgent(agentId)
 	if agent == nil {
 		c.String(http.StatusNotFound, "Agent not found")
 		return
@@ -74,7 +72,7 @@ func taskAgent(c *gin.Context) {
 		return
 	}
 
-	agent := agentService.GetAgent(agentId)
+	agent := agents.GetServiceInstance().GetAgent(agentId)
 	if agent == nil {
 		c.String(http.StatusNotFound, "Agent not found")
 		return

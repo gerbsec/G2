@@ -4,6 +4,18 @@ import (
 	"sync"
 )
 
+var once sync.Once
+var instance AgentService
+
+func GetServiceInstance() AgentService {
+	once.Do(func() {
+		instance = &Service{
+			agents: make([]*Agent, 0),
+		}
+	})
+	return instance
+}
+
 type AgentService interface {
 	AddAgent(agent *Agent)
 	GetAgents() []*Agent
