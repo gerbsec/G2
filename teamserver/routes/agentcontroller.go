@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/gerbsec/D2/agents"
+	"github.com/gerbsec/D2/teamserver/agents"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
