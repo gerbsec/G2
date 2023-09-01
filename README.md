@@ -3,4 +3,7 @@ Dommand and Dontrol
 
 D2 is a project for learning we are not responsible for usage. 
 
-work in progress
+work in progress:
+Teamserver i think done
+
+agent needs to be built
