@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gerbsec/D2/agents" // Replace with your project path
+	"github.com/gerbsec/D2/teamserver/agents"
 )
 
 type HttpListener struct {
