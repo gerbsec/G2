@@ -22,11 +22,7 @@ var (
 func main() {
 	generateMetadata()
 	loadAgentCommands()
-
-	commModule = &models.HttpCommModule{
-		ConnectAddress: "localhost",
-		ConnectPort:    8001,
-	}
+	commModule = models.NewHttpCommModule("localhost", 8001)
 	commModule.Init(metadata)
 
 	done := commModule.Start()

@@ -54,6 +54,12 @@ func (a *Agent) GetTaskResult(taskId string) *AgentTaskResult {
 	return nil
 }
 
+func (a *Agent) AddTaskResult(taskResult *AgentTaskResult) {
+	a.mutex.Lock()
+	defer a.mutex.Unlock()
+	a.taskResults = append(a.taskResults, taskResult)
+}
+
 func (a *Agent) GetTaskResults() []*AgentTaskResult {
 	a.mutex.Lock()
 	defer a.mutex.Unlock()
