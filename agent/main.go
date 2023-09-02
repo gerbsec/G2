@@ -30,18 +30,19 @@ func main() {
 	commModule.Init(metadata)
 
 	done := commModule.Start()
+	defer commModule.Stop()
 
 	for {
 		select {
 		case <-done:
 			return
-		case <-time.After(time.Second):
+		case <-time.After(time.Second * 5):
 			tasks, ok := commModule.RecvData()
 			if ok {
 				handleTasks(tasks)
 			}
 		}
-		defer commModule.Stop()
+
 	}
 }
 
