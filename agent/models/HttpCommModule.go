@@ -21,7 +21,7 @@ func NewHttpCommModule(connectAddress string, connectPort int) *HttpCommModule {
 	return &HttpCommModule{
 		BaseCommModule: BaseCommModule{
 			Inbound:  make(chan *AgentTask),
-			Outbound: make(chan *AgentTaskResult),
+			Outbound: make(chan *AgentTaskResult, 10),
 		},
 		ConnectAddress: connectAddress,
 		ConnectPort:    connectPort,
@@ -58,7 +58,7 @@ func (h *HttpCommModule) Start() chan bool {
 				} else {
 					h.checkIn()
 				}
-				time.Sleep(1 * time.Second)
+				time.Sleep(5 * time.Second)
 			}
 		}
 	}()

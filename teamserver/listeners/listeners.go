@@ -41,6 +41,16 @@ func handleImplant(w http.ResponseWriter, r *http.Request) {
 	agent.LastSeen = time.Now().UTC()
 	tasks := agent.GetPendingTasks()
 	response, _ := json.Marshal(tasks)
+	var results []*agents.AgentTaskResult
+	if r.Method == "POST" {
+		err = json.NewDecoder(r.Body).Decode(&results)
+		if err == nil {
+			for _, result := range results {
+				agent.AddTaskResult(result)
+			}
+		}
+		fmt.Printf("%s, fuh jey", err)
+	}
 	w.Write(response)
 }
 
