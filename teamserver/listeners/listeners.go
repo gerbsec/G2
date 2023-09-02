@@ -38,7 +38,7 @@ func handleImplant(w http.ResponseWriter, r *http.Request) {
 		agents.GetServiceInstance().AddAgent(agent)
 		log.Printf("Agent added successfully")
 	}
-
+	agent.LastSeen = time.Now().UTC()
 	tasks := agent.GetPendingTasks()
 	response, _ := json.Marshal(tasks)
 	w.Write(response)

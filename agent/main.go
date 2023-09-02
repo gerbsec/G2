@@ -30,6 +30,7 @@ func main() {
 	commModule.Init(metadata)
 
 	done := commModule.Start()
+	defer commModule.Stop()
 
 	for {
 		select {
@@ -41,7 +42,7 @@ func main() {
 				handleTasks(tasks)
 			}
 		}
-		defer commModule.Stop()
+
 	}
 }
 
