@@ -1,9 +1,11 @@
-# D2
-Dommand and Dontrol
+# G2
+## Gommand and Gontrol
+Golang Command and Control
 
-D2 is a project for learning we are not responsible for usage. 
+Teamserver I think is done. 
 
-work in progress:
-Teamserver i think done
+Agent logic is done, just needs some commands so that its not useless.
 
-agent needs to be built
+Front end for operator needs to be made as well.
+
+G2 is a project for learning we are not responsible for usage. 
