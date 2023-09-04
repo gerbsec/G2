@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gerbsec/D2/teamserver/agents"
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,11 @@ func SetupAgentRoutes(r *gin.Engine) {
 
 func getAgents(c *gin.Context) {
 	allAgents := agents.GetServiceInstance().GetAgents()
+	for _, agent := range allAgents {
+		if time.Since(agent.LastSeen) > 3*time.Minute {
+			agents.GetServiceInstance().RemoveAgent(agent)
+		}
+	}
 	c.JSON(http.StatusOK, allAgents)
 }
 
