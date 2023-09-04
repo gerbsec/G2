@@ -21,11 +21,11 @@ func getListenerInfoByName(c *gin.Context) {
 		c.String(http.StatusNotFound, err.Error())
 		return
 	}
-	c.String(http.StatusOK, info)
+	c.JSON(http.StatusOK, info)
 }
 
 func getAllListenersInfo(c *gin.Context) {
-	c.String(http.StatusOK, listeners.GetAllListenersInfo())
+	c.JSON(http.StatusOK, listeners.GetAllListenersInfo())
 }
 
 func createListener(c *gin.Context) {

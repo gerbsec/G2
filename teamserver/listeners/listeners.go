@@ -127,25 +127,19 @@ func CreateListener(name, bindPort string) error {
 	return nil
 }
 
-func GetListenerInfoByName(name string) (string, error) {
+func GetListenerInfoByName(name string) (*HttpListener, error) {
 	if listener, exists := listenersMap[name]; exists {
-		data, err := json.Marshal(listener)
-		if err != nil {
-			return "", err
-		}
-		return string(data), nil
+		return listener, nil
 	}
-	return "", fmt.Errorf("No listener found with name: %s", name)
+	return nil, fmt.Errorf("No listener found with name: %s", name)
 }
 
-func GetAllListenersInfo() string {
+func GetAllListenersInfo() []*HttpListener {
 	var infos []*HttpListener
 	for _, l := range listenersMap {
 		infos = append(infos, l)
 	}
-
-	data, _ := json.Marshal(infos)
-	return string(data)
+	return infos
 }
 
 func StopListenerByName(name string) {

