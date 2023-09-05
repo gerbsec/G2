@@ -14,6 +14,7 @@ func SetupAgentRoutes(r *gin.Engine) {
 	r.GET("/Agents/:agentId", getAgent)
 	r.GET("/Agents/:agentId/tasks", getTaskResults)
 	r.GET("/Agents/:agentId/tasks/:taskId", getTaskResult)
+	r.DELETE("/Agents/:agentId/RemoveAgent", RemoveAgent)
 	r.POST("/Agents/:agentId", taskAgent)
 }
 
@@ -97,4 +98,10 @@ func taskAgent(c *gin.Context) {
 	path := root + "/tasks/" + task.Id
 
 	c.JSON(http.StatusCreated, gin.H{"task": task, "path": path})
+}
+
+func RemoveAgent(c *gin.Context) {
+	agentId := c.Param("agentId")
+	agent := agents.GetServiceInstance().GetAgent(agentId)
+	agents.GetServiceInstance().RemoveAgent(agent)
 }
