@@ -110,8 +110,12 @@ func (s *HttpListener) Stop() {
 }
 
 func CreateListener(name, bindPort string) error {
-	if _, exists := listenersMap[name]; exists {
+	if _, Nexists := listenersMap[name]; Nexists {
 		return fmt.Errorf("a listener with the name %s already exists", name)
+	}
+
+	if _, Pexists := listenersMap[bindPort]; Pexists {
+		return fmt.Errorf("a listener with the port %s already exists", bindPort)
 	}
 
 	l := &HttpListener{
