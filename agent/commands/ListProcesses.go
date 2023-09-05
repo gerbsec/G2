@@ -28,8 +28,12 @@ func (l *ListProcesses) Execute(task *models.AgentTask) string {
 		if err != nil {
 			continue
 		}
-		processList = append(processList, name)
+
+		pid := p.Pid // get the PID of the process
+
+		processInfo := fmt.Sprintf("%d: %s", pid, name)
+		processList = append(processList, processInfo)
 	}
 
-	return fmt.Sprintf("Processes: %s", strings.Join(processList, "\n"))
+	return fmt.Sprintf("Processes:\n%s", strings.Join(processList, "\n"))
 }

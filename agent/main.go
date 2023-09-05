@@ -22,7 +22,7 @@ var (
 
 func main() {
 	LHOST := "localhost"
-	LPORT := 8000
+	LPORT := 8001
 	generateMetadata()
 	loadAgentCommands()
 	commModule = models.NewHttpCommModule(LHOST, LPORT)
@@ -136,7 +136,6 @@ func generateMetadata() {
 }
 
 func loadAgentCommands() {
-	cmds = append(cmds, &commands.TestCommand{})
 	cmds = append(cmds, &commands.ChangeDirectory{})
 	cmds = append(cmds, &commands.PrintWorkingDirectory{})
 	cmds = append(cmds, &commands.ListDirectory{})
