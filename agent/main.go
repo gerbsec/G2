@@ -140,4 +140,5 @@ func loadAgentCommands() {
 	cmds = append(cmds, &commands.PrintWorkingDirectory{})
 	cmds = append(cmds, &commands.ListDirectory{})
 	cmds = append(cmds, &commands.ListProcesses{})
+	cmds = append(cmds, &commands.KillAgent{})
 }
