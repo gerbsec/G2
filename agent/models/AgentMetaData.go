@@ -4,8 +4,8 @@ type AgentMetadata struct {
 	Id           string
 	Hostname     string
 	Username     string
+	Ip           string
 	ProcessName  string
 	ProcessId    int
-	Integrity    string
 	Architecture string
 }

