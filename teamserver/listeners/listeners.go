@@ -49,7 +49,6 @@ func handleImplant(w http.ResponseWriter, r *http.Request) {
 				agent.AddTaskResult(result)
 			}
 		}
-		fmt.Printf("%s, fuh jey", err)
 	}
 	w.Write(response)
 }
