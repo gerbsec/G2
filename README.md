@@ -9,6 +9,6 @@ Agent logic is done, just needs some commands so that its not useless.
 Temserver updates:
 - Add beacon generation to team server 
 
-Front end for operator needs to be made as well.
+Front end for operator needs to be made as well, probably with react js.
 
 G2 is a project made for educational purposes. I are not responsible for usage. 
