@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"runtime"
 
-	"github.com/gerbsec/D2/agent/models"
+	"github.com/gerbsec/G2/agent/models"
 )
 
 var _ models.AgentCommand = (*ListDirectory)(nil)

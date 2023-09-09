@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gerbsec/D2/teamserver/agents"
+	"github.com/gerbsec/G2/teamserver/agents"
 )
 
 type HttpListener struct {

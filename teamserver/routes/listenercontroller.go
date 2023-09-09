@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/gerbsec/D2/teamserver/listeners"
+	"github.com/gerbsec/G2/teamserver/listeners"
 	"github.com/gin-gonic/gin"
 )
 

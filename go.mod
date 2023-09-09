@@ -1,4 +1,4 @@
-module github.com/gerbsec/D2
+module github.com/gerbsec/G2
 
 go 1.18
 

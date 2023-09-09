@@ -1,10 +1,15 @@
 package routes
 
 import (
+	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"os/exec"
+	"runtime"
 	"time"
 
-	"github.com/gerbsec/D2/teamserver/agents"
+	"github.com/gerbsec/G2/teamserver/agents"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -16,6 +21,7 @@ func SetupAgentRoutes(r *gin.Engine) {
 	r.GET("/Agents/:agentId/tasks/:taskId", getTaskResult)
 	r.DELETE("/Agents/:agentId/RemoveAgent", RemoveAgent)
 	r.POST("/Agents/:agentId", taskAgent)
+	r.POST("/GenerateAgent", generateAgent)
 }
 
 func getAgents(c *gin.Context) {
@@ -63,6 +69,37 @@ func getTaskResult(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, result)
+}
+
+type AgentGen struct {
+	OS           string `json:"os"`
+	Architecture string `json:"arch"`
+}
+
+func generateAgent(c *gin.Context) {
+	var a AgentGen
+	if err := c.BindJSON(&a); err != nil {
+		c.String(http.StatusBadRequest, "Data incorrect")
+		return
+	}
+	var cmd []string
+	if runtime.GOOS == "windows" {
+		cmd = []string{"powershell.exe", "/c"}
+	} else {
+		cmd = []string{"sh", "-c"}
+	}
+	command := exec.Command(cmd[0], cmd[1], fmt.Sprintf("env GOOS=%s GOARCH=%s go build -o payload ../agent/main.go", a.OS, a.Architecture))
+	if err := command.Run(); err != nil {
+		log.Fatal(err)
+	}
+	byteFile, err := ioutil.ReadFile("./payload")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	c.Header("Content-Disposition", "attachment; filename=file-name.txt")
+	c.Data(http.StatusOK, "application/octet-stream", byteFile)
+
 }
 
 type TaskAgentRequest struct {

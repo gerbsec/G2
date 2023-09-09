@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gerbsec/D2/agent/models"
+	"github.com/gerbsec/G2/agent/models"
 	"github.com/shirou/gopsutil/process"
 )
 

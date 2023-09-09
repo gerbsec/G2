@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gerbsec/D2/teamserver/routes"
+	"github.com/gerbsec/G2/teamserver/routes"
 	"github.com/gin-gonic/gin"
 )
 
