@@ -3,6 +3,7 @@
 Golang Command and Control
 
 Teamserver I think is done. 
+- make sure that it doesn't crash if we use same name or port for service
 
 Agent logic is done, just needs some commands so that its not useless.
 - Need a few more commands
