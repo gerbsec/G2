@@ -7,7 +7,7 @@ Teamserver I think is done.
 
 Agent logic is done, just needs some commands so that its not useless.
 - Need a few more commands
-- foh
+- loll
 
 
 Front end for operator needs to be made as well, probably with react js or maybe just bootstrap.
