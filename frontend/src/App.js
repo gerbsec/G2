@@ -17,6 +17,12 @@ function App() {
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [agentOS, setAgentOS] = useState('windows');
+  const [agentArch, setAgentArch] = useState('amd64');
+  const [showAgentModal, setShowAgentModal] = useState(false);
+
+  const toggleAgentModal = () => setShowAgentModal(!showAgentModal); // new function to toggle the agent modal
+
 
   const toggleModal = () => setShowModal(!showModal);
 
@@ -62,8 +68,8 @@ function App() {
 
   const generateAgent = () => {
     axios.post(`http://${serverAddress}/GenerateAgent`, {
-      os: "windows",
-      arch: "amd64"
+      os: agentOS,
+      arch: agentArch
     }).catch(err => setError(err.toString()));
   };
 
@@ -97,12 +103,47 @@ function App() {
       {isVerified ? (
         <>
           <header className="App-header">
-            <button onClick={generateAgent}>Generate Agent</button>
+            <Button variant="primary" onClick={toggleAgentModal}>Generate Agent</Button>
             <Button variant="primary" onClick={toggleModal}>
               Listener Management
             </Button>
           </header>
 
+          {/* Agent Modal */}
+          <Modal show={showAgentModal} onHide={toggleAgentModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Generate Agent</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div>
+                <label>Operating System: </label>
+                <select value={agentOS} onChange={(e) => setAgentOS(e.target.value)}>
+                  <option value="windows">Windows</option>
+                  <option value="linux">Linux</option>
+                  <option value="darwin">Mac</option>
+                  {/* Add other OS options as needed */}
+                </select>
+              </div>
+              <div>
+                <label>Architecture: </label>
+                <select value={agentArch} onChange={(e) => setAgentArch(e.target.value)}>
+                  <option value="amd64">AMD64</option>
+                  <option value="386">386</option>
+                  {/* Add other architecture options as needed */}
+                </select>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={toggleAgentModal}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={generateAgent}>
+                Generate
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Listener Modal */}
           <Modal show={showModal} onHide={toggleModal}>
             <Modal.Header closeButton>
               <Modal.Title>Listener Management</Modal.Title>
@@ -121,18 +162,22 @@ function App() {
                   <p>No listeners available.</p>
                 )}
               </div>
-              <input
-                type="text"
-                placeholder="Listener Name"
-                value={listenerName}
-                onChange={(e) => setListenerName(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Listener Port"
-                value={listenerPort}
-                onChange={(e) => setListenerPort(e.target.value)}
-              />
+              <div>
+                <input
+                  type="text"
+                  placeholder="Listener Name"
+                  value={listenerName}
+                  onChange={(e) => setListenerName(e.target.value)}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Listener Port"
+                  value={listenerPort}
+                  onChange={(e) => setListenerPort(e.target.value)}
+                />
+              </div>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={toggleModal}>
@@ -148,9 +193,16 @@ function App() {
             {Array.isArray(agents) && agents.length > 0 ? (
               agents.map((agent) => (
                 <AgentCard
-                  key={agent.Id}
-                  agent={agent}
-                  removeAgent={() => removeAgent(agent.Id)}
+                  key={agent.Metadata.Id}
+                  agentId={agent.Metadata.Id}
+                  hostname={agent.Metadata.Hostname}
+                  username={agent.Metadata.Username}
+                  ip={agent.Metadata.Ip}
+                  processName={agent.Metadata.ProcessName}
+                  processId={agent.Metadata.ProcessId}
+                  architecture={agent.Metadata.Architecture}
+                  lastSeen={agent.LastSeen}
+                  removeAgent={() => removeAgent(agent.Metadata.Id)}
                   sendCommand={(id) => sendCommand(id)}
                 />
               ))
