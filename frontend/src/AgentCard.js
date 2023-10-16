@@ -1,18 +1,20 @@
 import React from 'react';
 
-function AgentCard({ agent, removeAgent, sendCommand }) {
+function AgentCard({ agentId, hostname, username, ip, processName, processId, architecture, lastSeen, removeAgent, sendCommand }) {
   return (
     <div className="agent-card">
-      <h3>{agent.Hostname}</h3>
-      <p>ID: {agent.Id}</p>
-      <p>Status: {agent.ProcessName}</p>
-      <p>Username: {agent.Username}</p>
-      <p>IP: {agent.Ip}</p>
-      <p>Process ID: {agent.ProcessId}</p>
-      <p>Architecture: {agent.Architecture}</p>
-      <button onClick={() => removeAgent(agent.Id)}>Remove</button>
-      <button onClick={() => sendCommand(agent.Id)}>Send Command</button>
+      <p>ID: {agentId}</p>
+      <p>Hostname: {hostname}</p>
+      <p>Username: {username}</p>
+      <p>IP Address: {ip}</p>
+      <p>Process Name: {processName}</p>
+      <p>Process ID: {processId}</p>
+      <p>Architecture: {architecture}</p>
+      <p>Last Seen: {lastSeen}</p>
+      <button onClick={removeAgent}>Remove</button>
+      <button onClick={() => sendCommand(agentId)}>Send Command</button>
     </div>
   );
 }
+
 export default AgentCard;
