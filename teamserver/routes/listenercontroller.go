@@ -4,14 +4,26 @@ import (
 	"net/http"
 
 	"github.com/gerbsec/G2/teamserver/listeners"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupListenerRoutes(r *gin.Engine) {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+
+	r.Use(cors.New(config))
 	r.GET("/Listeners/:name", getListenerInfoByName)
 	r.GET("/Listeners", getAllListenersInfo)
 	r.POST("/Listener", createListener)
 	r.DELETE("/StopListener/:name", stopListener)
+	r.GET("/HealthCheck", healthCheck)
+}
+
+func healthCheck(c *gin.Context) {
+	c.String(http.StatusOK, "G2 Teamserver")
 }
 
 func getListenerInfoByName(c *gin.Context) {

@@ -10,11 +10,18 @@ import (
 	"time"
 
 	"github.com/gerbsec/G2/teamserver/agents"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 func SetupAgentRoutes(r *gin.Engine) {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+
+	r.Use(cors.New(config))
 	r.GET("/Agents", getAgents)
 	r.GET("/Agents/:agentId", getAgent)
 	r.GET("/Agents/:agentId/tasks", getTaskResults)
