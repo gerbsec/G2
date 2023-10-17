@@ -115,31 +115,34 @@ function App() {
               <Modal.Title>Generate Agent</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div>
-                <label>Operating System: </label>
-                <select value={agentOS} onChange={(e) => setAgentOS(e.target.value)}>
-                  <option value="windows">Windows</option>
-                  <option value="linux">Linux</option>
-                  <option value="darwin">Mac</option>
-                  {/* Add other OS options as needed */}
-                </select>
-              </div>
-              <div>
-                <label>Architecture: </label>
-                <select value={agentArch} onChange={(e) => setAgentArch(e.target.value)}>
-                  <option value="amd64">AMD64</option>
-                  <option value="386">386</option>
-                  {/* Add other architecture options as needed */}
-                </select>
+              <div className="agent-modal-content">
+                <div>
+                  <label>Listener:</label>
+                  <a  value="http" style={{ width: "200px", marginLeft: "10px" }}>http</a>
+                </div>
+                <div>
+                  <label>Output:</label>
+                  <select value={agentOS} onChange={(e) => setAgentOS(e.target.value)}>
+                    <option value="windows">Windows EXE</option>
+                    <option value="linux">Linux Binary</option>
+                    <option value="darwin">Mac Binary</option>
+                    {/* Add other OS options as needed */}
+                  </select>
+                </div>
+                <div>
+                  <label>Arch:</label>
+                  <select value={agentArch} onChange={(e) => setAgentArch(e.target.value)}>
+                    <option value="amd64">AMD-x64</option>
+                    <option value="arm64">ARM-x64</option>
+                  </select>
+                </div>
+                <div>
+                </div>
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={toggleAgentModal}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={generateAgent}>
-                Generate
-              </Button>
+              <button onClick={generateAgent}>Generate</button>
+              <button onClick={toggleAgentModal}>Cancel</button>
             </Modal.Footer>
           </Modal>
 
