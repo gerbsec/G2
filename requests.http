@@ -1,3 +1,4 @@
+
 POST http://localhost:8080/Listener HTTP/1.1
 content-type: application/json
 
@@ -15,3 +16,11 @@ DELETE http://localhost:8080/StopListener/jay HTTP/1.1
 
 ### 
 GET http://localhost:8080/Agents HTTP/1.1
+### 
+POST http://localhost:8080/GenerateAgent HTTP/1.1
+content-type: application/json
+
+{
+    "os": "windows",
+    "arch": "amd64"
+}
