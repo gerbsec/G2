@@ -2,9 +2,9 @@ package routes
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
 	"time"
@@ -99,14 +99,13 @@ func generateAgent(c *gin.Context) {
 	if err := command.Run(); err != nil {
 		log.Fatal(err)
 	}
-	byteFile, err := ioutil.ReadFile("./payload")
+	byteFile, err := os.ReadFile("./payload")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	c.Header("Content-Disposition", "attachment; filename=file-name.txt")
 	c.Data(http.StatusOK, "application/octet-stream", byteFile)
-
 }
 
 type TaskAgentRequest struct {
