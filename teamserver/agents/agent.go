@@ -6,8 +6,8 @@ import (
 )
 
 type Agent struct {
-	Metadata     *AgentMetadata
-	LastSeen     time.Time
+	Metadata     *AgentMetadata `json:"metadata"`
+	LastSeen     time.Time      `json:"lastSeen"`
 	pendingTasks []*AgentTask
 	taskResults  []*AgentTaskResult
 	mutex        sync.Mutex

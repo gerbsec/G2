@@ -2,9 +2,9 @@ package routes
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
 	"time"
@@ -91,22 +91,21 @@ func generateAgent(c *gin.Context) {
 	}
 	var cmd []string
 	if runtime.GOOS == "windows" {
-		cmd = []string{"powershell.exe", "/c"}
+		cmd = []string{"powershell.exe", "/c", fmt.Sprintf("$Env:GOOS = '%s'; $Env:GOARCH = '%s'; go build -o payload ../agent/main.go", a.OS, a.Architecture)}
 	} else {
-		cmd = []string{"sh", "-c"}
+		cmd = []string{"sh", "-c", fmt.Sprintf("env GOOS=%s GOARCH=%s go build -o payload ../agent/main.go", a.OS, a.Architecture)}
 	}
-	command := exec.Command(cmd[0], cmd[1], fmt.Sprintf("env GOOS=%s GOARCH=%s go build -o payload ../agent/main.go", a.OS, a.Architecture))
+	command := exec.Command(cmd[0], cmd[1], cmd[2])
 	if err := command.Run(); err != nil {
 		log.Fatal(err)
 	}
-	byteFile, err := ioutil.ReadFile("./payload")
+	byteFile, err := os.ReadFile("./payload")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	c.Header("Content-Disposition", "attachment; filename=file-name.txt")
 	c.Data(http.StatusOK, "application/octet-stream", byteFile)
-
 }
 
 type TaskAgentRequest struct {
