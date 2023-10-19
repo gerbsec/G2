@@ -6,3 +6,31 @@ body {
   background-color: #1a1a1a;
   color: white;
 }
+.slide-up-terminal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50vh;
+    background-color: #000;
+    color: #fff;
+    animation: slide-up 0.5s ease-in-out;
+}
+
+@keyframes slide-up {
+    from {
+        bottom: -50vh;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+.command-input {
+    width: 100%;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #333;
+    outline: none;
+}

@@ -9,6 +9,7 @@ import {
 import { Listener, ListenerSchema } from "./models";
 import { z } from "zod";
 import { Listeners } from "./Listeners";
+import { Agents } from "./Agents";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ServerProvider } from './ServerContext';
@@ -184,6 +185,7 @@ function App({ unlocked, setUnlocked }) {
       {unlocked ? (
         <>
           <Navbar />
+          <Agents />
         </>
       ) : (
         <LockPage setUnlocked={setUnlocked} />
