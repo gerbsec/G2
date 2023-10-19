@@ -83,13 +83,27 @@ function Navbar() {
   const [selectedArch, setSelectedArch] = useState("amd64");
 
   const generateAgent = async (platform: string, arch: string) => {
-    try {
-      const response = await axios.post(`http://${ip}:${port}/GenerateAgent`, { platform, arch });
-      // Handle the response
-    } catch (error) {
-      console.error('Failed to generate agent');
-    }
-  };
+  try {
+    const response = await axios.post(`http://${ip}:${port}/GenerateAgent`, { platform, arch }, {
+      responseType: 'arraybuffer', 
+    });
+
+    const blob = new Blob([response.data], { type: 'application/octet-stream' });
+    
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Agent_${platform}_${arch}.bin`);
+    
+    document.body.appendChild(link);
+    link.click();
+    
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Failed to generate agent');
+  }
+};
 
   return (
     <ul className="flex child:mx-2 bg-black border-solid border-white border-2 shadow-md">
