@@ -66,7 +66,6 @@ curl -X POST http://localhost:8080/Agents/f32701aa-fcfc-4346-b716-f794071d257b \
      -d '{
           "command": "your-command-here",
           "arguments": ["arg1", "arg2"],
-          "file": "your-binary-data-here"
          }'
 ```
 
