@@ -16,7 +16,7 @@ import (
 
 type HttpListener struct {
 	Name     string `json:"name"`
-	BindPort string `json:"bind_port"`
+	BindPort string `json:"bindPort"`
 	server   *http.Server
 	stopChan chan bool
 	wg       *sync.WaitGroup
@@ -138,10 +138,15 @@ func GetListenerInfoByName(name string) (*HttpListener, error) {
 }
 
 func GetAllListenersInfo() []*HttpListener {
+	if len(listenersMap) == 0 {
+		return []*HttpListener{}
+	}
+
 	var infos []*HttpListener
 	for _, l := range listenersMap {
 		infos = append(infos, l)
 	}
+
 	return infos
 }
 
