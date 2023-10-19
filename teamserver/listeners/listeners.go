@@ -23,6 +23,7 @@ type HttpListener struct {
 }
 
 var listenersMap = make(map[string]*HttpListener)
+var bindPortsMap = make(map[string]bool) // tracks used bind ports
 
 func handleImplant(w http.ResponseWriter, r *http.Request) {
 	metadata, err := extractMetadata(r.Header)
@@ -114,7 +115,7 @@ func CreateListener(name, bindPort string) error {
 		return fmt.Errorf("a listener with the name %s already exists", name)
 	}
 
-	if _, Pexists := listenersMap[bindPort]; Pexists {
+	if bindPortsMap[bindPort] {
 		return fmt.Errorf("a listener with the port %s already exists", bindPort)
 	}
 
@@ -126,6 +127,7 @@ func CreateListener(name, bindPort string) error {
 	}
 	l.wg.Add(1)
 	listenersMap[name] = l
+	bindPortsMap[bindPort] = true // mark bindport as used
 	l.Start()
 	return nil
 }
