@@ -7,3 +7,5 @@ clean up frontend. have working terminal that looks a bit neater.
 Front end for operator needs to be made as well.
 
 G2 is a project made for educational purposes. I are not responsible for usage. 
+
+okay i need to wrap it up
